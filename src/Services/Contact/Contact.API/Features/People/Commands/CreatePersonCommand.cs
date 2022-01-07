@@ -1,6 +1,8 @@
 ﻿using Contact.API.Entities;
 using Contact.API.Infrastructure.Data;
+using EventBus.IntegrationEvents;
 using FluentValidation;
+using MassTransit;
 using MediatR;
 
 namespace Contact.API.Features.People.Commands;
@@ -15,10 +17,12 @@ public class CreatePersonCommand : IRequest<PersonDto>
 public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, PersonDto>
 {
     private readonly ContactContext _context;
+    private readonly IBus _bus;
 
-    public CreatePersonCommandHandler(ContactContext context)
+    public CreatePersonCommandHandler(ContactContext context, IBus bus)
     {
         _context = context;
+        _bus = bus;
     }
 
     public class CreatePersonCommandValidator : AbstractValidator<CreatePersonCommand>
@@ -42,6 +46,15 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, P
 
         await _context.People.AddAsync(personEntity);
         await _context.SaveChangesAsync();
+
+        await _bus.Publish(new PersonCreatedEvent()
+        {
+            PersonIdOnContactService = personEntity.Id,
+            Name = personEntity.Name,
+            Lastname = personEntity.Lastname,
+            Company = personEntity.CompanyName
+        });
+
 
         return new()
         {

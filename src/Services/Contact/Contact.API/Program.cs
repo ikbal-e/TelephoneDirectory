@@ -4,6 +4,7 @@ using MediatR;
 using FluentValidation;
 using Contact.API.Infrastructure.PipelineBehaviors;
 using Contact.API.Infrastructure.Middlewares;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,16 @@ ValidatorOptions.Global.LanguageManager.Enabled = false;
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddDbContext<ContactContext>(option => option.UseInMemoryDatabase("rageAgainstTheMachine"));
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+        cfg.Host("192.168.99.100"); //TODO:
+    });
+});
+builder.Services.AddMassTransitHostedService(true);
 
 var app = builder.Build();
 

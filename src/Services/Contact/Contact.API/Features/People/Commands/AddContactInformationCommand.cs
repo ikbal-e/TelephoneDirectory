@@ -2,7 +2,9 @@
 using Contact.API.Features.People.DTOs;
 using Contact.API.Infrastructure.Data;
 using Contact.API.ValueObjects;
+using EventBus.IntegrationEvents;
 using FluentValidation;
+using MassTransit;
 using MediatR;
 
 namespace Contact.API.Features.People.Commands;
@@ -27,10 +29,12 @@ public class AddContactInformationCommandValidator : AbstractValidator<AddContac
 public class AddContactInformationCommandHandler : IRequestHandler<AddContactInformationCommand, ContactInformationResponseDto>
 {
     private readonly ContactContext _context;
+    private readonly IBus _bus;
 
-    public AddContactInformationCommandHandler(ContactContext context)
+    public AddContactInformationCommandHandler(ContactContext context, IBus bus)
     {
         _context = context;
+        _bus = bus;
     }
 
     public async Task<ContactInformationResponseDto> Handle(AddContactInformationCommand request, CancellationToken cancellationToken)
@@ -44,6 +48,14 @@ public class AddContactInformationCommandHandler : IRequestHandler<AddContactInf
 
         await _context.Contacts.AddAsync(contactInfo);
         await _context.SaveChangesAsync();
+
+        await _bus.Publish(new ContactInfoCreatedEvent()
+        {
+            PersonIdOnContactService = request.PersonId,
+            ContactIdOnContactService = contactInfo.Id,
+            ContactInformationType = (int)request.ContactInformationType.Value,
+            Value = request.Value
+        });
 
         return new()
         {

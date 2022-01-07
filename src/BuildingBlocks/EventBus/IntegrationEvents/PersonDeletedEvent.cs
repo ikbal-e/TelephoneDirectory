@@ -8,4 +8,5 @@ namespace EventBus.IntegrationEvents;
 
 public class PersonDeletedEvent
 {
+    public Guid PersonIdOnContactService { get; set; }
 }

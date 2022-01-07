@@ -8,4 +8,8 @@ namespace EventBus.IntegrationEvents;
 
 public class PersonCreatedEvent
 {
+    public Guid PersonIdOnContactService { get; set; }
+    public string Name { get; set; }
+    public string Lastname { get; set; }
+    public string Company { get; set; }
 }

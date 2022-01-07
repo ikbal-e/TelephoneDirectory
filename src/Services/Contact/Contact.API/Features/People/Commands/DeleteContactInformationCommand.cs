@@ -1,5 +1,7 @@
 ﻿using Contact.API.Features.People.Exceptions;
 using Contact.API.Infrastructure.Data;
+using EventBus.IntegrationEvents;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +16,7 @@ public class DeleteContactInformationCommand : IRequest<Unit>
 public class DeleteContactInformationCommanddHandler : IRequestHandler<DeleteContactInformationCommand>
 {
     private readonly ContactContext _context;
+    private readonly IBus _bus;
 
     public DeleteContactInformationCommanddHandler(ContactContext context)
     {
@@ -31,6 +34,11 @@ public class DeleteContactInformationCommanddHandler : IRequestHandler<DeleteCon
 
         _context.Contacts.Remove(contactInfo);
         await _context.SaveChangesAsync();
+
+        await _bus.Publish(new ContactInfoDeletedEvent()
+        {
+            ContactIdOnContactService = request.ContactInformationId
+        });
 
         return Unit.Value;
     }
