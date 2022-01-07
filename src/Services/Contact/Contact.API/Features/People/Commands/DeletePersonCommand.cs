@@ -4,13 +4,12 @@ using MediatR;
 
 namespace Contact.API.Features.People.Commands;
 
-public class DeletePersonCommand
+public class DeletePersonCommand : IRequest<Unit>
 {
     public Guid PersonId { get; set; }
 }
 
-//TODO:
-public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, Unit>
+public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand>
 {
     private readonly ContactContext _context;
 
