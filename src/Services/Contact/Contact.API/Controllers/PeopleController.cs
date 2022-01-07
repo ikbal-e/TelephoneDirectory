@@ -20,13 +20,26 @@ public class PeopleController : ControllerBase
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetPeopleAsync(CancellationToken cancellationToken)
     {
         var people = await _mediator.Send(new GetPeopleQuery(), cancellationToken);
+
         return Ok(people);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<IEnumerable<PersonDto>>> GetPersonAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var person = await _mediator.Send(new GetPersonDetailQuery
+        {
+            PersonId = id,
+        }, cancellationToken);
+
+        return Ok(person);
     }
 
     [HttpPost()]
     public async Task<ActionResult<PersonDto>> CreatePersonAsync([FromBody] CreatePersonCommand createPersonCommand)
     {
         var person = await _mediator.Send(createPersonCommand);
+
         return CreatedAtRoute("", person);
     }
 
@@ -42,7 +55,7 @@ public class PeopleController : ControllerBase
     }
 
     [HttpPost("{id}/ContactInformations")]
-    public async Task<ActionResult<ContactInformationResponseDto>> AddContactInformation([FromRoute] Guid id, [FromBody] ContactInformationRequestDto contactInformationDto)
+    public async Task<ActionResult<ContactInformationResponseDto>> AddContactInformationAsync([FromRoute] Guid id, [FromBody] ContactInformationRequestDto contactInformationDto)
     {
         var contactInformation = await _mediator.Send(new AddContactInformationCommand 
         { 
@@ -55,7 +68,7 @@ public class PeopleController : ControllerBase
     }
 
     [HttpDelete("{personId}/ContactInformations/{contactInformationId}")]
-    public async Task<ActionResult> AddContactInformation([FromRoute] Guid personId, [FromRoute] Guid contactInformationId)
+    public async Task<ActionResult> AddContactInformationAsync([FromRoute] Guid personId, [FromRoute] Guid contactInformationId)
     {
         await _mediator.Send(new DeleteContactInformationCommand
         {
