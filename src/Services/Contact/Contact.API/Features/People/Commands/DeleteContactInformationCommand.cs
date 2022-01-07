@@ -18,9 +18,10 @@ public class DeleteContactInformationCommanddHandler : IRequestHandler<DeleteCon
     private readonly ContactContext _context;
     private readonly IBus _bus;
 
-    public DeleteContactInformationCommanddHandler(ContactContext context)
+    public DeleteContactInformationCommanddHandler(ContactContext context, IBus bus)
     {
         _context = context;
+        _bus = bus;
     }
 
     public async Task<Unit> Handle(DeleteContactInformationCommand request, CancellationToken cancellationToken)

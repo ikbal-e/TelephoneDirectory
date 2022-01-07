@@ -44,11 +44,11 @@ public class PeopleController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeletePersonAsync([FromRoute] Guid Id)
+    public async Task<ActionResult> DeletePersonAsync([FromRoute] Guid id)
     {
         await _mediator.Send(new DeletePersonCommand
         {
-            PersonId = Id
+            PersonId = id
         });
 
         return NoContent();

@@ -1,11 +1,17 @@
 using MassTransit;
 using Report.API.Consumers;
+using Report.API.Infrastructure.Data;
+using Report.API.Infrastructure.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<ReportDatabaseSettings>(builder.Configuration.GetSection(nameof(ReportDatabaseSettings)));
+
+builder.Services.AddSingleton<ReportContext>();
 
 builder.Services.AddMassTransit(x =>
 {
