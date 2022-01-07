@@ -28,4 +28,15 @@ public class PeopleController : ControllerBase
         var person = await _mediator.Send(createPersonCommand);
         return CreatedAtRoute("", person);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeletePersonAsync([FromRoute] Guid Id)
+    {
+        await _mediator.Send(new DeletePersonCommand
+        {
+            PersonId = Id
+        });
+
+        return NoContent();
+    }
 }
