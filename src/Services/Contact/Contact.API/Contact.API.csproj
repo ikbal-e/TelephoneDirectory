@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Person\DTOs\" />
     <Folder Include="Infrastructure\Data\Migrations\" />
   </ItemGroup>
 

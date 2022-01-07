@@ -1,10 +1,9 @@
-﻿namespace Contact.API.Entities;
+﻿namespace Contact.API.Features.People.Commands;
 
-public class Person
+public class PersonDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string Lastname { get; set; }
     public string CompanyName { get; set; }
-    public List<ContactInformation> ContactInformations { get; set; } = new();
 }
