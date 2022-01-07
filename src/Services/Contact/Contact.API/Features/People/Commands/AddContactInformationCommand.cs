@@ -2,6 +2,7 @@
 using Contact.API.Features.People.DTOs;
 using Contact.API.Infrastructure.Data;
 using Contact.API.ValueObjects;
+using FluentValidation;
 using MediatR;
 
 namespace Contact.API.Features.People.Commands;
@@ -9,8 +10,18 @@ namespace Contact.API.Features.People.Commands;
 public class AddContactInformationCommand : IRequest<ContactInformationResponseDto>
 {
     public Guid PersonId { get; set; }
-    public ContactInformationType ContactInformationType { get; set; }
+    public ContactInformationType? ContactInformationType { get; set; }
     public string Value { get; set; }
+}
+
+public class AddContactInformationCommandValidator : AbstractValidator<AddContactInformationCommand>
+{
+    public AddContactInformationCommandValidator()
+    {
+        RuleFor(x => x.ContactInformationType).NotNull();
+        RuleFor(x => x.PersonId).NotEmpty();
+        RuleFor(x => x.Value).NotEmpty();
+    }
 }
 
 public class AddContactInformationCommandHandler : IRequestHandler<AddContactInformationCommand, ContactInformationResponseDto>
@@ -27,7 +38,7 @@ public class AddContactInformationCommandHandler : IRequestHandler<AddContactInf
         var contactInfo = new ContactInformation
         {
             PersonId = request.PersonId,
-            ContactInformationType = request.ContactInformationType,
+            ContactInformationType = request.ContactInformationType.Value,
             Value = request.Value
         };
 
