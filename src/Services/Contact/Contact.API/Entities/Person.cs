@@ -7,5 +7,10 @@ public class Person
     public string Lastname { get; set; }
     public string CompanyName { get; set; }
     public Guid ContactInformationId { get; set; }
-    public ContactInformation ContactInformation { get; set; }
+    public List<ContactInformation> ContactInformations { get; set; } = new();
+
+    public void AddContactInformation()
+    {
+        ContactInformations.Add(new ContactInformation { });
+    }
 }
