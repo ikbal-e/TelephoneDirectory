@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Report.API.Models;
 using Report.API.Services;
 
 namespace Report.API.Controllers;
@@ -22,6 +23,13 @@ public class ReportsController : ControllerBase
     {
         var reports = await _documentService.GetLocationReportsAsync();
         return Ok(reports);
+    }
+
+    [HttpGet("{id}/Detail")]
+    public async Task<ActionResult> GetReportAsync([FromRoute] string id)
+    {
+        var report = await _documentService.GetGeportDetailAsync(id);
+        return File(report, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 
     [HttpPost()]

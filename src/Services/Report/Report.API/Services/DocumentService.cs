@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using OfficeOpenXml;
 using Report.API.Infrastructure.Data;
 using MongoDB.Driver.Linq;
+using Report.API.Models;
 
 namespace Report.API.Services;
 
@@ -33,5 +34,12 @@ public class DocumentService : IDocumentService
     {
         var reports = await _context.Reports.AsQueryable().ToListAsync();
         return reports;
+    }
+
+    public async Task<FileStream> GetGeportDetailAsync(string id)
+    {
+        var report = await (await _context.Reports.FindAsync(x => x.Id == id)).FirstOrDefaultAsync();
+
+        return File.OpenRead(report.Path);
     }
 }
