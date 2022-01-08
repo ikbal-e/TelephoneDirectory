@@ -1,6 +1,5 @@
 ﻿using EventBus.IntegrationEvents;
 using MassTransit;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Report.API.Infrastructure.Data;

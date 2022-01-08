@@ -55,7 +55,6 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, P
             Company = personEntity.CompanyName
         });
 
-
         return new()
         {
             Id = personEntity.Id,
