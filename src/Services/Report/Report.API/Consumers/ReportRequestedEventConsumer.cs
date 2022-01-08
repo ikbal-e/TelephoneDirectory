@@ -20,7 +20,7 @@ public class ReportRequestedEventConsumer : IConsumer<ReportRequestedEvent>
 
     public async Task Consume(ConsumeContext<ReportRequestedEvent> context)
     {
-        var uniqueLocations = await (await _context.People.DistinctAsync<string>("Locations.Name", new BsonDocument())).ToListAsync();
+        var uniqueLocations =  await _context.People.AsQueryable().SelectMany(x => x.Locations).Select(x => x.Name).Distinct().ToListAsync();
 
         var locationReport = new List<LocationReportData>();
         foreach (var uniqueLocation in uniqueLocations)
