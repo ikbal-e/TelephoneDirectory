@@ -35,7 +35,7 @@ public class ReportsController : ControllerBase
     [HttpPost()]
     public async Task<ActionResult> CreateReportAsync()
     {
-        var reportId = await _locationService.GenerateReportAsync();
+        var reportId = await _locationService.MakeReportRequestAsync();
         return Created("", reportId);
     }
 }

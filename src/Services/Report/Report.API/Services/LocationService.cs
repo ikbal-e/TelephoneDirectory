@@ -16,7 +16,7 @@ public class LocationService : ILocationService
     }
 
 
-    public async Task<string> GenerateReportAsync()
+    public async Task<string> MakeReportRequestAsync()
     {
         var requestedAt = DateTime.UtcNow;
 

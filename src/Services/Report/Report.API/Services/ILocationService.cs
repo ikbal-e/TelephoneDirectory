@@ -3,5 +3,5 @@ namespace Report.API.Services;
 
 public interface ILocationService
 {
-    Task<string> GenerateReportAsync();
+    Task<string> MakeReportRequestAsync();
 }
