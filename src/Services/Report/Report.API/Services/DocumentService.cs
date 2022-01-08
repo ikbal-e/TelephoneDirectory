@@ -36,7 +36,7 @@ public class DocumentService : IDocumentService
         return reports;
     }
 
-    public async Task<FileStream> GetGeportDetailAsync(string id)
+    public async Task<FileStream> GetGeportFileAsync(string id)
     {
         var report = await (await _context.Reports.FindAsync(x => x.Id == id)).FirstOrDefaultAsync();
 

@@ -28,7 +28,7 @@ public class ReportsController : ControllerBase
     [HttpGet("{id}/Detail")]
     public async Task<ActionResult> GetReportAsync([FromRoute] string id)
     {
-        var report = await _documentService.GetGeportDetailAsync(id);
+        var report = await _documentService.GetGeportFileAsync(id);
         return File(report, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 
