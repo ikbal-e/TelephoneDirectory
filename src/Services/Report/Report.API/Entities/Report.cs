@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Report.API.ValueObjects;
 
-namespace Report.API.Entitites;
+namespace Report.API.Entities;
 
 public class Report
 {

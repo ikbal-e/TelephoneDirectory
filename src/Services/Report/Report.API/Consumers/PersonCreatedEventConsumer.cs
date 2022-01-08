@@ -2,7 +2,7 @@
 using MassTransit;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Report.API.Entitites;
+using Report.API.Entities;
 using Report.API.Infrastructure.Data;
 
 namespace Report.API.Consumers;

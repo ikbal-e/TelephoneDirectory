@@ -3,7 +3,6 @@ using MassTransit;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using Report.API.Entitites;
 using Report.API.Infrastructure.Data;
 using Report.API.Models;
 using Report.API.Services;
@@ -40,8 +39,8 @@ public class ReportRequestedEventConsumer : IConsumer<ReportRequestedEvent>
 
         var filePath = await _documentService.CreateExcelFileAsync(locationReport, "LocationReports");
 
-        var filter = Builders<Entitites.Report>.Filter.Eq(x => x.Id, context.Message.ReportId);
-        var update = Builders<Entitites.Report>.Update
+        var filter = Builders<Entities.Report>.Filter.Eq(x => x.Id, context.Message.ReportId);
+        var update = Builders<Entities.Report>.Update
             .Set(x => x.Path, filePath)
             .Set(x => x.Status, ValueObjects.ReportStatus.Ready);
 

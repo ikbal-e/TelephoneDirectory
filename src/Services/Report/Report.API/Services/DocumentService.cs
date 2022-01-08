@@ -1,10 +1,20 @@
 ﻿using Bogus;
+using MongoDB.Driver;
 using OfficeOpenXml;
+using Report.API.Infrastructure.Data;
+using MongoDB.Driver.Linq;
 
 namespace Report.API.Services;
 
 public class DocumentService : IDocumentService
 {
+    private readonly ReportContext _context;
+
+    public DocumentService(ReportContext context)
+    {
+        _context = context;
+    }
+
     public async Task<string> CreateExcelFileAsync<T>(IEnumerable<T> data, string fileDirectory)
     {
         var randomName = $"{DateTimeOffset.Now.ToUnixTimeMilliseconds()}-{string.Join("-", new Faker().Lorem.Words(3))}";
@@ -17,5 +27,11 @@ public class DocumentService : IDocumentService
         await p.SaveAsAsync(file);
 
         return filePath;
+    }
+
+    public async Task<IEnumerable<Entities.Report>> GetLocationReportsAsync()
+    {
+        var reports = await _context.Reports.AsQueryable().ToListAsync();
+        return reports;
     }
 }

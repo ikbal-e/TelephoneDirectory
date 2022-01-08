@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Report.API.Entitites;
+namespace Report.API.Entities;
 
 public class PhoneNumber
 {

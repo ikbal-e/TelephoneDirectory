@@ -1,7 +1,7 @@
 ﻿using EventBus.IntegrationEvents;
 using MassTransit;
 using MongoDB.Driver;
-using Report.API.Entitites;
+using Report.API.Entities;
 using Report.API.Infrastructure.Data;
 
 namespace Report.API.Consumers;

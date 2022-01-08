@@ -1,7 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Report.API.Entities;
 
-namespace Report.API.Entitites;
+namespace Report.API.Entities;
 
 public class Person
 {

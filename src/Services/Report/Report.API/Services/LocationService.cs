@@ -1,7 +1,6 @@
 ﻿using EventBus.IntegrationEvents;
 using MassTransit;
 using Report.API.Infrastructure.Data;
-using Entities = Report.API.Entitites;
 
 namespace Report.API.Services;
 
