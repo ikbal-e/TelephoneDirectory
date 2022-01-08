@@ -31,7 +31,7 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("192.168.99.100"); //TODO: 
+        cfg.Host(builder.Configuration.GetSection("RabbitMQ:Host").Value);
         cfg.ConfigureEndpoints(context);
     });
 });

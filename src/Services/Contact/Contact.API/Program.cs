@@ -16,14 +16,15 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 ValidatorOptions.Global.LanguageManager.Enabled = false;
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-builder.Services.AddDbContext<ContactContext>(option => option.UseInMemoryDatabase("rageAgainstTheMachine"));
+builder.Services.AddDbContext<ContactContext>(option =>
+    option.UseNpgsql(builder.Configuration.GetConnectionString("ContactDb")));
 
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.ConfigureEndpoints(context);
-        cfg.Host("192.168.99.100"); //TODO:
+        cfg.Host(builder.Configuration.GetSection("RabbitMQ:Host").Value);
     });
 });
 builder.Services.AddMassTransitHostedService(true);
@@ -43,5 +44,10 @@ app.UseAuthorization();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
+
+using (var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<ContactContext>().Database.Migrate();
+}
 
 app.Run();
