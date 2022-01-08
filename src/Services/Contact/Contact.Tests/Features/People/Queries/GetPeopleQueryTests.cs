@@ -24,7 +24,7 @@ public class GetPeopleQueryTests
 
         context.People.AddRange(new Person[]
         {
-            new Person{Name = "Name", Lastname = "Lastname", CompanyName = "Companyname"}
+            new Person { Name = "Name", Lastname = "Lastname", CompanyName = "Companyname" }
         });
 
         await context.SaveChangesAsync();

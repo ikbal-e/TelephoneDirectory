@@ -27,7 +27,7 @@ public class GetPersonDetailQueryTests
         context.People.AddRange(new Person[]
         {
             person1,
-            new Person{Name = "Name2", Lastname = "Lastname2", CompanyName = "Companyname2"},
+            new Person { Name = "Name2", Lastname = "Lastname2", CompanyName = "Companyname2" },
         });
 
         await context.SaveChangesAsync();
@@ -51,7 +51,7 @@ public class GetPersonDetailQueryTests
         await context.SaveChangesAsync();
 
         var getPersonDetailQuerydHandler = new GetPersonDetailQuerydHandler(context);
-        var getPersonDetailQuery = new GetPersonDetailQuery { PersonId = person1.Id};
+        var getPersonDetailQuery = new GetPersonDetailQuery { PersonId = person1.Id };
 
         var person = await getPersonDetailQuerydHandler.Handle(getPersonDetailQuery, CancellationToken.None);
 
