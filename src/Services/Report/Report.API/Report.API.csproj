@@ -19,8 +19,4 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="StaticFiles\LocationReports\" />
-  </ItemGroup>
-
 </Project>
