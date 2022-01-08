@@ -52,4 +52,4 @@ Report.API - https://localhost:7289/swagger/index.html
 
 ## Architecture Overview
 
-![overview](/overview.png)
+![overview](img/overview.png)
