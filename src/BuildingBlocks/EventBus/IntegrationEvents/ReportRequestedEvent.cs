@@ -8,5 +8,6 @@ namespace EventBus.IntegrationEvents;
 
 public class ReportRequestedEvent
 {
+    public string ReportId { get; set; }
     public DateTime RequestedAt { get; set; }
 }

@@ -6,16 +6,19 @@ using MongoDB.Driver.Linq;
 using Report.API.Entitites;
 using Report.API.Infrastructure.Data;
 using Report.API.Models;
+using Report.API.Services;
 
 namespace Report.API.Consumers;
 
 public class ReportRequestedEventConsumer : IConsumer<ReportRequestedEvent>
 {
     private readonly ReportContext _context;
+    private readonly IDocumentService _documentService;
 
-    public ReportRequestedEventConsumer(ReportContext context)
+    public ReportRequestedEventConsumer(ReportContext context, IDocumentService documentService)
     {
         _context = context;
+        _documentService = documentService;
     }
 
     public async Task Consume(ConsumeContext<ReportRequestedEvent> context)
@@ -33,8 +36,15 @@ public class ReportRequestedEventConsumer : IConsumer<ReportRequestedEvent>
             };
 
             locationReport.Add(location);
-
-            //TODO:
         }
+
+        var filePath = await _documentService.CreateExcelFileAsync(locationReport, "LocationReports");
+
+        var filter = Builders<Entitites.Report>.Filter.Eq(x => x.Id, context.Message.ReportId);
+        var update = Builders<Entitites.Report>.Update
+            .Set(x => x.Path, filePath)
+            .Set(x => x.Status, ValueObjects.ReportStatus.Ready);
+
+        var result = await _context.Reports.UpdateOneAsync(filter, update);
     }
 }

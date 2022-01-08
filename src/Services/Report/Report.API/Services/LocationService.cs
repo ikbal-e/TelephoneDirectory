@@ -23,15 +23,17 @@ public class LocationService : ILocationService
 
         var report = new Entities.Report
         {
-            RequestedAt = requestedAt
+            RequestedAt = requestedAt,
+            Status = ValueObjects.ReportStatus.InProgress
         };
 
         await _context.Reports.InsertOneAsync(report);
 
         await _bus.Publish(new ReportRequestedEvent()
         {
-            RequestedAt = requestedAt
-        }); ;
+            ReportId = report.Id,
+            RequestedAt = requestedAt,
+        });
 
         return report.Id;
     }

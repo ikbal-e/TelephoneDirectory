@@ -1,4 +1,5 @@
 using MassTransit;
+using OfficeOpenXml;
 using Report.API.Consumers;
 using Report.API.Infrastructure.Data;
 using Report.API.Infrastructure.Models;
@@ -9,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 builder.Services.Configure<ReportDatabaseSettings>(builder.Configuration.GetSection(nameof(ReportDatabaseSettings)));
 
@@ -35,6 +38,7 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddMassTransitHostedService(true);
 
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
 
 var app = builder.Build();
 
