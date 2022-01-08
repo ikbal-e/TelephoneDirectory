@@ -1,11 +1,13 @@
 ﻿using Contact.API.Entities;
 using Contact.API.Features.People.DTOs;
+using Contact.API.Features.People.Exceptions;
 using Contact.API.Infrastructure.Data;
 using Contact.API.ValueObjects;
 using EventBus.IntegrationEvents;
 using FluentValidation;
 using MassTransit;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Contact.API.Features.People.Commands;
 
@@ -39,6 +41,12 @@ public class AddContactInformationCommandHandler : IRequestHandler<AddContactInf
 
     public async Task<ContactInformationResponseDto> Handle(AddContactInformationCommand request, CancellationToken cancellationToken)
     {
+        var personExists = await _context
+            .People
+            .AnyAsync(x => x.Id == request.PersonId);
+
+        if (!personExists) throw new PersonNotFoundException("Person Not Found");
+
         var contactInfo = new ContactInformation
         {
             PersonId = request.PersonId,

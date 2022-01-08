@@ -1,5 +1,6 @@
 ﻿using Contact.API.Entities;
 using Contact.API.Features.People.Commands;
+using Contact.API.Features.People.Exceptions;
 using Contact.API.Infrastructure.Data;
 using FluentAssertions;
 using MassTransit;
@@ -18,7 +19,7 @@ namespace Contact.Tests.Features.People.Commands;
 public class AddContactInformationCommandTest
 {
     [Fact]
-    public async Task Test1()
+    public async Task AddContactInformationCommand_Should_Add_New_Contact_Info()
     {
         var context = new ContactContext(new DbContextOptionsBuilder<ContactContext>()
            .UseInMemoryDatabase(databaseName: $"{Guid.NewGuid()}")
@@ -48,5 +49,24 @@ public class AddContactInformationCommandTest
         contactInformation.ContactInformationId.Should().NotBe(Guid.Empty);
         contactInformation.PersonId.Should().Be(michael.Id);
         contactInformation.Value.Should().Be("Scranton");
+    }
+
+    [Fact]
+    public async Task AddContactInformationCommand_Should_Throw_NotFoud_Error_When_Person_Not_Exists()
+    {
+        var context = new ContactContext(new DbContextOptionsBuilder<ContactContext>()
+            .UseInMemoryDatabase(databaseName: $"{Guid.NewGuid()}")
+            .Options);
+
+        var addContactInformationCommand = new AddContactInformationCommand
+        {
+            PersonId = Guid.NewGuid()
+        };
+
+        var addContactInformationCommandHandler = new AddContactInformationCommandHandler(context, new Mock<IBus>().Object);
+
+        var action = async () => await addContactInformationCommandHandler.Handle(addContactInformationCommand, CancellationToken.None);
+
+        await action.Should().ThrowAsync<PersonNotFoundException>();
     }
 }
