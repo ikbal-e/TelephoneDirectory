@@ -25,7 +25,7 @@ Change configurations on appsettings.json file on Report.API
  },
 ```
 
-At root directory of solution execute these  commands
+At the root directory of solution execute these  commands
 
 ```
 dotnet run --project .\src\Services\Contact\Contact.API\Contact.API.csproj
