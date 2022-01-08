@@ -2,6 +2,7 @@ using MassTransit;
 using Report.API.Consumers;
 using Report.API.Infrastructure.Data;
 using Report.API.Infrastructure.Models;
+using Report.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,12 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<ContactInfoCreatedEventConsumer>().Endpoint(e => e.Name = "contact-info-created-event-queue");
     x.AddConsumer<ContactInfoDeletedEventConsumer>().Endpoint(e => e.Name = "contact-info-deleted-event-queue");
     x.AddConsumer<PersonCreatedEventConsumer>().Endpoint(e => e.Name = "person-created-event-queue");
-    x.AddConsumer<PersonDeletedEventConsumer>().Endpoint(e => e.Name = "person-deleted-created-event-queue"); ;
+    x.AddConsumer<PersonDeletedEventConsumer>().Endpoint(e => e.Name = "person-deleted-created-event-queue");
+    x.AddConsumer<ReportRequestedEventConsumer>().Endpoint(e =>
+    {
+        e.Name = "report-requested-event-queue";
+        e.ConcurrentMessageLimit = 1;
+    });
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -27,6 +33,8 @@ builder.Services.AddMassTransit(x =>
     });
 });
 builder.Services.AddMassTransitHostedService(true);
+
+builder.Services.AddScoped<ILocationService, LocationService>();
 
 var app = builder.Build();
 
