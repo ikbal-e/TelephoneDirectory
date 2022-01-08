@@ -8,12 +8,10 @@ namespace Report.API.Controllers;
 [ApiController]
 public class ReportsController : ControllerBase
 {
-    private readonly ILocationService _locationService;
     private readonly IDocumentService _documentService;
 
-    public ReportsController(ILocationService locationService, IDocumentService documentService)
+    public ReportsController(IDocumentService documentService)
     {
-        _locationService = locationService;
         _documentService = documentService;
     }
 
@@ -35,7 +33,7 @@ public class ReportsController : ControllerBase
     [HttpPost()]
     public async Task<ActionResult> CreateReportAsync()
     {
-        var reportId = await _locationService.MakeReportRequestAsync();
+        var reportId = await _documentService.MakeReportRequestAsync();
         return Created("", reportId);
     }
 }

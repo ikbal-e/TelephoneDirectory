@@ -37,7 +37,6 @@ builder.Services.AddMassTransit(x =>
 });
 builder.Services.AddMassTransitHostedService(true);
 
-builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 
 var app = builder.Build();
