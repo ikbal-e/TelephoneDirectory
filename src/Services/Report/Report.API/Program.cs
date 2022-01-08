@@ -1,15 +1,46 @@
+using MassTransit;
+using OfficeOpenXml;
+using Report.API.Consumers;
+using Report.API.Infrastructure.Data;
+using Report.API.Infrastructure.Models;
+using Report.API.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+builder.Services.Configure<ReportDatabaseSettings>(builder.Configuration.GetSection(nameof(ReportDatabaseSettings)));
+
+builder.Services.AddSingleton<ReportContext>();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<ContactInfoCreatedEventConsumer>().Endpoint(e => e.Name = "contact-info-created-event-queue");
+    x.AddConsumer<ContactInfoDeletedEventConsumer>().Endpoint(e => e.Name = "contact-info-deleted-event-queue");
+    x.AddConsumer<PersonCreatedEventConsumer>().Endpoint(e => e.Name = "person-created-event-queue");
+    x.AddConsumer<PersonDeletedEventConsumer>().Endpoint(e => e.Name = "person-deleted-created-event-queue");
+    x.AddConsumer<ReportRequestedEventConsumer>().Endpoint(e =>
+    {
+        e.Name = "report-requested-event-queue";
+        e.ConcurrentMessageLimit = 1;
+    });
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration.GetSection("RabbitMQ:Host").Value);
+        cfg.ConfigureEndpoints(context);
+    });
+});
+builder.Services.AddMassTransitHostedService(true);
+
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
