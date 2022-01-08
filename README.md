@@ -4,7 +4,7 @@ Change configurations on appsettings.json file on Contact.API
 
 ```
 "ConnectionStrings": {
-    "ContactDb": "[Your postgresql connectiong string for contact service database]"
+    "ContactDb": "[Your postgresql connection string for contact service database]"
   },
 "RabbitMQ": {
     "Host": "[RabbitMQ Host Adress]"
